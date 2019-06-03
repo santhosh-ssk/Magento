@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="css/mailercode.css" />
+    </head>
+    <body>
+        <referenceContainer name="product.info.main">
+            <container name="product.info.mailercode" label="product info mailercode" htmlTag="div"  before="-" htmlClass="product-info-mailercode">
+                <block  name="product.info.mailercode.content" template="Magento_Catalog::mailerCode/index.phtml">
+                    <arguments>
+                        <argument name="mailer_code_session_view_model" xsi:type="object">Zilker\MailerCode\ViewModel\Product\MailerCode</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+    </body>
+</page>
