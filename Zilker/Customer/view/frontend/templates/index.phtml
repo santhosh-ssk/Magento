@@ -1,0 +1,32 @@
+<?php
+
+    /**
+     * @var Zilker\Customer\ViewModel\Customer\Details $customerSession;
+     */
+    $customerSession = $block->getCustomerSessionViewModel();
+    /**
+     * @var Magento\Customer\Model\Customer $customer;
+     */
+    $customer = $customerSession->getCustomer();
+?>
+<?php if ($customer) : ?>
+    <div>
+        <h3>Account Information</h3><hr/>
+        <p>Name: <?= $customer->getName(); ?></p>
+        <p>Email:<?= $customer->getEmail(); ?></p>
+        <p>Password: XXXXXXX</p>
+    </div>
+    <br/>
+    <div>
+        <h3>Contact Information</h3><hr/>
+        <?php $phone = $customer->getPrimaryBillingAddress()->getTelephone()?>
+        <?php if ($phone): ?>
+            <p>Phone: <?= $phone?></p>
+        <?php endif; ?>
+        <?php /** @var Magento\Framework\DataObject $customerAddress */
+        $customerAddress = $customer->getAddresses() ?>
+        <?php foreach ($customerAddress as $address): ?>
+            <b>Address:</b> <address><?= $address->getStreetFull() ?></address>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>

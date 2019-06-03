@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!--MailerCodeModel Interface Preference-->
+    <preference for="Zilker\MailerCodeApi\Api\Data\MailerCodeInterface"
+                type="Zilker\MailerCodeApi\Model\MailerCode" />
+
+    <!-- MailerCode Repository Preference-->
+    <preference for="Zilker\MailerCodeApi\Api\MailerCodeRepositoryInterface"
+                type="Zilker\MailerCodeApi\Model\MailerCodeRepository" />
+
+    <!-- MailerCodeSearchResults Interface Preference-->
+    <preference for="Zilker\MailerCodeApi\Api\Data\MailerCodeSearchInterface"
+                type="Zilker\MailerCodeApi\Model\MailerCodeSearchResults" />
+</config>

@@ -1,0 +1,32 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="zilker_product_mailer_code" resource="default" engine="innodb"  comment="Product Mailer Code Attribute Backend Table" >
+        <column xsi:type="int"       name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar"   name="sku" nullable="true" length="64" comment="Product SKU"/>
+        <column xsi:type="varchar"   name="mailer_code" nullable="true" length="64" comment="Product Mailer Code"/>
+        <column xsi:type="int"       name="min_quantity" padding="10" unsigned="true" nullable="false" comment="Minimum Quantity Required"/>
+        <column xsi:type="date"      name="effective_date"  nullable="false" comment="Effective Date"/>
+        <column xsi:type="date"      name="expiry_date"     nullable="false" comment="Expiry Date"/>
+        <column xsi:type="decimal"   name="price" scale="4" precision="12" unsigned="false" nullable="false" default="0"
+                comment="Price"/>
+        <column xsi:type="boolean"   name="is_active"  default="false" comment="Is Active"/>
+        <column xsi:type="varchar"   name="search_code" nullable="true" length="64" comment="Mailer search Bar Code"/>
+        <column xsi:type="varchar"   name="search_alt_code" nullable="true" length="64" comment="Mailer search Bar Alternative Code"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+
+        <constraint xsi:type="unique" referenceId="PRODUCT_MAILER_CODE_MAILER_CODE_SKU">
+            <column name="sku"/>
+            <column name="mailer_code"/>
+        </constraint>
+
+        <index referenceId="PRODUCT_MAILER_CODE_MAILER_SEARCH_CODE" indexType="btree">
+            <column name="search_code"/>
+        </index>
+        <index referenceId="PRODUCT_MAILER_CODE_MAILER_SEARCH_ALT_CODE" indexType="btree">
+            <column name="search_alt_code"/>
+        </index>
+    </table>
+</schema>

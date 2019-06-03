@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" >
+
+    <body>
+        <referenceContainer name="sidebar.additional" remove="true"/>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">My Profile</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceContainer name="content">
+            <block  cacheable="false" name="customer_details" template="Zilker_Customer::index.phtml">
+                <arguments>
+                    <argument name="customer_session_view_model" xsi:type="object">Zilker\Customer\ViewModel\Customer\Details</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

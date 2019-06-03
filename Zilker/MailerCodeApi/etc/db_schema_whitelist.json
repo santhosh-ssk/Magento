@@ -1,0 +1,24 @@
+{
+    "zilker_product_mailer_code": {
+        "column": {
+            "entity_id": true,
+            "sku": true,
+            "mailer_code": true,
+            "min_quantity": true,
+            "effective_date": true,
+            "expiry_date": true,
+            "price": true,
+            "is_active": true,
+            "search_code": true,
+            "search_alt_code": true
+        },
+        "index": {
+            "ZILKER_PRODUCT_MAILER_CODE_SEARCH_CODE": true,
+            "ZILKER_PRODUCT_MAILER_CODE_SEARCH_ALT_CODE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ZILKER_PRODUCT_MAILER_CODE_SKU_MAILER_CODE": true
+        }
+    }
+}

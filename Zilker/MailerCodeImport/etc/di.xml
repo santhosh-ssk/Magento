@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Import -->
+    <type name="Zilker\MailerCodeImport\Model\Import\MailerCodeImport">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="delete" xsi:type="object">Magento\InventoryImportExport\Model\Import\Command\Delete</item>
+                <item name="append" xsi:type="object">Magento\InventoryImportExport\Model\Import\Command\Append</item>
+                <item name="replace" xsi:type="object">Magento\InventoryImportExport\Model\Import\Command\Replace</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Import\SampleFileProvider">
+        <arguments>
+            <argument name="samples" xsi:type="array">
+                <item name="zilker_product_mailer_code_trial" xsi:type="string">Magento_InventoryImportExport</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
