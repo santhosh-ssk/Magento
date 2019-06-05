@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Zilker\MailerCode\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Helper\Context;
 use Magento\Search\Model\QueryFactory;
 
 /**
@@ -13,16 +12,7 @@ use Magento\Search\Model\QueryFactory;
  */
 class Data extends AbstractHelper
 {
-
-    /**
-     * Data constructor.
-     * @param Context $context
-     */
-    public function __construct(
-        Context $context
-    ) {
-        parent::__construct($context);
-    }
+    const MAILERCODE = 'mailercode';
 
     /**
      * Retrieve result page url and set "secure" param to avoid confirm
@@ -46,11 +36,28 @@ class Data extends AbstractHelper
      * @param   string $query
      * @return  string
      */
-    public function getRedirectUrl($query = null)
+    public function getCatalogSearchRedirectUrl($query = null)
     {
         return $this->_getUrl(
             'catalogsearch/result',
             ['_query' => [QueryFactory::QUERY_VAR_NAME => $query], '_secure' => $this->_request->isSecure()]
         );
+    }
+
+    /**
+     * Retrieve search page url and set "secure" param to avoid confirm
+     * message when we submit form from secure page to unsecure
+     *
+     * @param String $url
+     * @param string $mailerCode
+     * @return  string
+     */
+    public function getPdpRedirectUrl(String $url, String $mailerCode)
+    {
+        return $url . '?mailercode= ' . $mailerCode;
+//        return $this->_getUrl(
+//            $url,
+//            ['_query' => [$this::MAILERCODE => $mailerCode], '_secure' => $this->_request->isSecure()]
+//        );
     }
 }

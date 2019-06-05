@@ -14,14 +14,16 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Search\Model\Query;
 use Magento\Search\Model\QueryFactory;
 use Psr\Log\LoggerInterface;
 use Zilker\MailerCode\Helper\Data as HelperData;
-use Zilker\MailerCode\Model\Session;
 use Zilker\MailerCodeApi\Api\Data\MailerCodeInterface;
 use Zilker\MailerCodeApi\Api\MailerCodeRepositoryInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Zilker\MailerCode\Model\Session as MailerCodeSession;
 
 /**
  * Class Results
@@ -65,16 +67,24 @@ class Results extends Action implements HttpGetActionInterface, HttpPostActionIn
     protected $searchCriteria;
 
     /**
-     * @var Session $mailerCodeSession
-     */
-    protected $mailerCodeSession;
-
-    /**
      * @var LoggerInterface $logger;
      */
     protected $logger;
 
+    /**
+     * @var ResultFactory $resultFactory
+     */
+    protected $resultFactory;
+
+    /**
+     * @var HttpContext $httpContext;
+     */
     protected $httpContext;
+
+    /**
+     * @var MailerCodeSession $mailerCodeSession
+     */
+    protected $mailerCodeSession;
 
     /**
      * Results constructor.
@@ -86,7 +96,10 @@ class Results extends Action implements HttpGetActionInterface, HttpPostActionIn
      * @param FilterFactory $filterFactory
      * @param FilterGroup $filterGroup
      * @param SearchCriteriaInterface $searchCriteria
-     * @param Session $session
+     * @param LoggerInterface $logger
+     * @param ResultFactory $resultFactory
+     * @param HttpContext $httpContext
+     * @param MailerCodeSession $mailerCodeSession
      */
     public function __construct(
         Context $context,
@@ -97,9 +110,10 @@ class Results extends Action implements HttpGetActionInterface, HttpPostActionIn
         FilterFactory $filterFactory,
         FilterGroup $filterGroup,
         SearchCriteriaInterface $searchCriteria,
-        Session $session,
         LoggerInterface $logger,
-        HttpContext $httpcontext
+        ResultFactory $resultFactory,
+        HttpContext $httpContext,
+        MailerCodeSession $mailerCodeSession
     ) {
         $this->helperData = $data;
         $this->queryFactory = $queryFactory;
@@ -108,17 +122,20 @@ class Results extends Action implements HttpGetActionInterface, HttpPostActionIn
         $this->filterFactory = $filterFactory;
         $this->filterGroup = $filterGroup;
         $this->searchCriteria = $searchCriteria;
-        $this->mailerCodeSession = $session;
         $this->logger = $logger;
-        $this->httpContext = $httpcontext;
+        $this->resultFactory = $resultFactory;
+        $this->httpContext = $httpContext;
+        $this->mailerCodeSession = $mailerCodeSession;
         parent::__construct($context);
     }
 
     /**
-     * @return void
+     * @return ResultInterface
      */
     public function execute()
     {
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+
         /** @var $query Query */
         $query = $this->queryFactory->get();
         $mailerSearchCode = $query->getQueryText();
@@ -129,31 +146,35 @@ class Results extends Action implements HttpGetActionInterface, HttpPostActionIn
         if (count($mailerCodes) > 0) {
             $mailerCode = $mailerCodes[0];
         }
-
-        $defaultMailerContext = 0;
-        $mailerCodeContext = $mailerCodes ? $mailerCode->getEntityId() : $defaultMailerContext;
-        $this->httpContext->setValue('CONTEXT_MAILER_CODE', $mailerCodeContext, $defaultMailerContext);
-        $this->logger->info("mailerCode Context: " . json_encode($mailerCodeContext));
+        $defaultContext = 0;
+        $mailerCodeContext = $mailerCode ? 1 : $defaultContext;
+        $this->httpContext->setValue('CONTEXT_MAILERCODE', $mailerCodeContext, $defaultContext);
         $this->mailerCodeSession->clearStorage();
-
         if ($mailerCode) {
             $productSku = $mailerCode->getSku();
+
             try {
                 /** @var ProductInterfaceFactory $product */
                 $product = $this->productRepository->get($productSku);
                 $productUrl = $product->getProductUrl();
-                $this->logger->info("product uri: " . $productUrl);
-
+//                $productUrl = $this->helperData->getPdpRedirectUrl($productUrl, $mailerCode->getSearchCode());
                 $this->mailerCodeSession->setMySession($mailerCode);
-                $this->getResponse()->setRedirect($productUrl);
+                $this->getResponse()->setNoCacheHeaders();
+                $resultRedirect->setUrl($productUrl);
+                $resultRedirect->setHttpResponseCode(307);
+                return $resultRedirect;
+
             } catch (\Exception $e) {
                 $this->logger->info($e);
-                $redirectUrl = $this->helperData->getRedirectUrl($mailerSearchCode);
-                $this->getResponse()->setRedirect($redirectUrl);
+                $redirectUrl = $this->helperData->getCatalogSearchRedirectUrl($mailerSearchCode);
+                $resultRedirect->setUrl($redirectUrl);
+                return $resultRedirect;
             }
+
         } else {
-            $redirectUrl = $this->helperData->getRedirectUrl($mailerSearchCode);
-            $this->getResponse()->setRedirect($redirectUrl);
+            $redirectUrl = $this->helperData->getCatalogSearchRedirectUrl($mailerSearchCode);
+            $resultRedirect->setUrl($redirectUrl);
+            return $resultRedirect;
         }
     }
 
