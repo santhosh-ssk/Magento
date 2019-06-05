@@ -2,17 +2,18 @@
 
 use Zilker\MailerCode\ViewModel\Product\MailerCode;
 use Zilker\MailerCodeApi\Api\Data\MailerCodeInterface;
+
 /**
- * @var MailerCode $viewModel;
- */
-$viewModel = $block->getMailerCodeSessionViewModel();
-/**
-* @var MailerCodeInterface $mailerCode
- */
-$mailerCode=$viewModel->getSessionData();
+     * @var MailerCode $mailerCodeViewModel
+     */
+    $mailerCodeViewModel = $block->getMailerCodeViewModel();
+    /**
+     * @var MailerCodeInterface $mailerCode;
+     */
+    $mailerCode = $mailerCodeViewModel->getSessionData();
 ?>
-<?php if ($mailerCode) : ?>
-<h3>MailerCode Applied</h3>
-    <p><strong>Code: </strong><?= $mailerCode->getSearchAltCode() ?></p>
-    <p><h2>Offer Price: $<?= $mailerCode->getPrice()?> (Min Quantity: <?= $mailerCode->getMinQuantity() ?>)</h2></p>
+<?php if ($mailerCode): ?>
+    <h3>MailerCode Applied</h3>
+    <h3><strong>Code: </strong><?=$mailerCode->getSearchAltCode()?></h3>
+    <h2>Offer Price: <?=$mailerCode->getPrice()?> (Min Quantity: <?=$mailerCode->getMinQuantity()?>)</h2>
 <?php endif; ?>

@@ -12,9 +12,9 @@
     <body>
         <referenceContainer name="product.info.main">
             <container name="product.info.mailercode" label="product info mailercode" htmlTag="div"  before="-" htmlClass="product-info-mailercode">
-                <block  name="product.info.mailercode.content" template="Magento_Catalog::mailerCode/index.phtml">
+                <block name="product.info.mailercode.content" template="Magento_Catalog::mailerCode/index.phtml">
                     <arguments>
-                        <argument name="mailer_code_session_view_model" xsi:type="object">Zilker\MailerCode\ViewModel\Product\MailerCode</argument>
+                        <argument name="mailer_code_view_model" xsi:type="object">Zilker\MailerCode\ViewModel\Product\MailerCode</argument>
                     </arguments>
                 </block>
             </container>
