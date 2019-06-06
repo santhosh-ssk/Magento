@@ -48,7 +48,6 @@ class MailerCode implements ArgumentInterface
              * @var MailerCodeInterface $data;
              */
             $data = $this->mailerCodeSession->getMySession();
-            $this->logger->info("Block Data: " . json_encode($data));
             $this->mailerCodeSession->clearStorage();
         } catch (Exception $e) {
             $this->logger->info("Error" . $e);

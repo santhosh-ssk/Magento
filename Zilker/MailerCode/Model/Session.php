@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Zilker\MailerCode\Model;
 
-use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\Event\ManagerInterface;
@@ -41,8 +40,7 @@ class Session extends SessionManager
      * @param ValidatorInterface $validator
      * @param StorageInterface $storage
      * @param CookieManagerInterface $cookieManager
-     * @param CookieMetadataFactory $cookieMetadataFactory
-     * @param Context $httpContext
+     * @param CookieMetadataFactory $cookieMetadata
      * @param State $appState
      * @param Generic $session
      * @param ManagerInterface $eventManager
@@ -57,8 +55,7 @@ class Session extends SessionManager
         ValidatorInterface $validator,
         StorageInterface $storage,
         CookieManagerInterface $cookieManager,
-        CookieMetadataFactory $cookieMetadataFactory,
-        Context $httpContext,
+        CookieMetadataFactory $cookieMetadata,
         State $appState,
         Generic $session,
         ManagerInterface $eventManager,
@@ -75,7 +72,7 @@ class Session extends SessionManager
             $validator,
             $storage,
             $cookieManager,
-            $cookieMetadataFactory,
+            $cookieMetadata,
             $appState
         );
         $this->response = $response;

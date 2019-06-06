@@ -8,9 +8,15 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <preference for="Zilker\MailerCode\Api\FetchMailerCodeInterface" type="Zilker\MailerCode\Model\FetchMailerCode"/>
+
     <!-- plugin-->
     <type name="Magento\CatalogSearch\Controller\Result\Index">
         <plugin name="Zilker_MailerCode_Plugin" type="Zilker\MailerCode\Plugin\Result\Index" sortOrder="1" disabled="true" />
+    </type>
+
+    <!-- plugin to change cart price-->
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="Zilker_MailerCode_Change_Cart_Price_Plugin" type="Zilker\MailerCode\Plugin\MailerCode\Product\Price" sortOrder="1" disabled="false" />
     </type>
 
     <!--   MailerCode custom session -->
