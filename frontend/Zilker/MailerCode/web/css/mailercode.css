@@ -4,3 +4,9 @@
     box-sizing: border-box;
     padding-bottom: 5px;
 }
+
+.column.main .product-info-main .product-add-form {
+        padding-top: 0px;
+    }
+
+
