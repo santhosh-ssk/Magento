@@ -11,10 +11,14 @@ use Zilker\MailerCodeApi\Api\Data\MailerCodeInterface;
      * @var MailerCodeInterface $mailerCode;
      */
     $mailerCode = $mailerCodeViewModel->getSessionData();
+
 ?>
+
 <?php if ($mailerCode): ?>
+<div class="mailercode-content">
+    <input type="hidden" name="mailercode" value="<?= $mailerCodeViewModel->getMailerCodeId()?>">
     <h3>MailerCode Applied</h3>
     <h3><strong>Code: </strong><?=$mailerCode->getSearchAltCode()?></h3>
     <h2>Offer Price: <?=$mailerCode->getPrice()?> (Min Quantity: <?=$mailerCode->getMinQuantity()?>)</h2>
-    <input type="hidden" name="mailercode" value="<?= $mailerCode->getEntityId()?>">
+</div>
 <?php endif; ?>
