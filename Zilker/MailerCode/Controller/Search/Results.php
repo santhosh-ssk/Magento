@@ -28,6 +28,7 @@ use Zilker\MailerCode\Model\Session as MailerCodeSession;
 /**
  * Class Results
  * @package Zilker\MailerCode\Controller\Search
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Results extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
@@ -100,6 +101,7 @@ class Results extends Action implements HttpGetActionInterface, HttpPostActionIn
      * @param ResultFactory $resultFactory
      * @param HttpContext $httpContext
      * @param MailerCodeSession $mailerCodeSession
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -164,7 +166,7 @@ class Results extends Action implements HttpGetActionInterface, HttpPostActionIn
                 $resultRedirect->setHttpResponseCode(307);
                 return $resultRedirect;
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->info($e);
                 $redirectUrl = $this->helperData->getCatalogSearchRedirectUrl($mailerSearchCode);
                 $resultRedirect->setUrl($redirectUrl);

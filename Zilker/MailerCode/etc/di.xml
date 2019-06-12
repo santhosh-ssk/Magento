@@ -15,8 +15,13 @@
     </type>
 
     <!-- plugin to change cart price-->
-    <type name="Magento\Quote\Model\Quote">
+    <type name="Magento\Quote\Model\Quote\Item\Processor">
         <plugin name="Zilker_MailerCode_Change_Cart_Price_Plugin" type="Zilker\MailerCode\Plugin\MailerCode\Product\Price" sortOrder="1" disabled="false" />
+    </type>
+
+    <!-- plugin to remove mailercode in buy request in cart merge-->
+    <type name="Magento\Quote\Model\Quote\Item">
+        <plugin name="Zilker_MailerCode_Remove_MailerCode_Plugin" type="Zilker\MailerCode\Plugin\MailerCode\Item\Options\RemoveMailerCode" sortOrder="1" disabled="false" />
     </type>
 
     <!--   MailerCode custom session -->

@@ -26,6 +26,11 @@ class MailerCode implements ArgumentInterface
     protected $logger;
 
     /**
+     * @var String $mailerCodeId
+     */
+    protected $mailerCodeId;
+
+    /**
      * MailerCode constructor.
      * @param Session $mailerCodeSession
      * @param LoggerInterface $logger
@@ -36,6 +41,7 @@ class MailerCode implements ArgumentInterface
     ) {
         $this->mailerCodeSession = $mailerCodeSession;
         $this->logger = $logger;
+        $this->mailerCodeId = null;
     }
 
     /**
@@ -49,9 +55,28 @@ class MailerCode implements ArgumentInterface
              */
             $data = $this->mailerCodeSession->getMySession();
             $this->mailerCodeSession->clearStorage();
+            if ($data) {
+                $this->setMailerCodeId($data->getEntityId());
+            }
         } catch (Exception $e) {
             $this->logger->info("Error" . $e);
         }
         return  $data;
+    }
+
+    /**
+     * @return String|null
+     */
+    public function getMailerCodeId(): ?String
+    {
+        return $this->mailerCodeId;
+    }
+
+    /**
+     * @param String $mailerCodeId
+     */
+    public function setMailerCodeId(String $mailerCodeId): void
+    {
+        $this->mailerCodeId = $mailerCodeId;
     }
 }

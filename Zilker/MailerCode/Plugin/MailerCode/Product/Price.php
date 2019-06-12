@@ -4,9 +4,9 @@ namespace Zilker\MailerCode\Plugin\MailerCode\Product;
 
 use Exception;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\DataObject;
-use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\Processor;
 use Psr\Log\LoggerInterface;
 use Zilker\MailerCodeApi\Api\Data\MailerCodeInterface;
 use Zilker\MailerCodeApi\Api\MailerCodeRepositoryInterface;
@@ -38,36 +38,37 @@ class Price
     }
 
     /**
-     * @param Quote $subject
-     * @param Product $product
-     * @param null|float|DataObject $request
-     * @param String|null $processMode
+     * @param Processor $processor
+     * @param Item $item
+     * @param DataObject $request
+     * @param Product $candidate
      * @return array
      */
-    public function beforeAddProduct(
-        Quote $subject,
-        $product,
-        $request = null,
-        $processMode = AbstractType::PROCESS_MODE_FULL
+    public function beforePrepare(
+        Processor $processor,
+        Item $item,
+        DataObject $request,
+        Product $candidate
     ) {
-        if ($request instanceof DataObject) {
-            if ($request->hasData("mailercode")) {
-                $entityId = $request->getData("mailercode");
-                /**
-                 * @var MailerCodeInterface $mailercode
-                 */
-                try {
-                    $mailercode = $this->mailerCodeRepository->getById($entityId);
-                    $minQuantity = $mailercode->getMinQuantity();
-                    $qty = $request->getData('qty');
-                    if ($qty >= $minQuantity) {
-                        $request->setCustomPrice($mailercode->getPrice());
-                    }
-                } catch (Exception $e) {
-                    $this->logger->info($e->getMessage());
+        if ($request->hasData("mailercode")) {
+            $entityId = $request->getData("mailercode");
+            /**
+             * @var MailerCodeInterface $mailercode
+             */
+            try {
+                $mailercode = $this->mailerCodeRepository->getById($entityId);
+                $minQuantity = $mailercode->getMinQuantity();
+                $qty = $item->getQty() + $candidate->getCartQty();
+                if ($qty >= $minQuantity) {
+                    $this->logger->info('qty: ' . $qty);
+                    $request->setCustomPrice($mailercode->getPrice());
+                    $request=$request->unsetData(['mailercode']);
                 }
+            } catch (Exception $e) {
+                $request->setCustomPrice($candidate->getPrice());
+                $this->logger->info($e->getMessage());
             }
         }
-        return [$product, $request, $processMode];
+        return [$item,$request,$candidate];
     }
 }
