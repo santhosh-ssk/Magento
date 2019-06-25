@@ -1,0 +1,13 @@
+
+<?php
+use Magento\Framework\View\Element\Template;
+use Zilker\CustomRegistry\ViewModel\ProductInfo;
+
+/** @var Template $block */
+/** @var ProductInfo $currentProductViewModel */
+$currentProductViewModel = $block->getData('current_progit duct');
+
+?>
+<div>
+    <div><?= __('Current Product Name: %1', $currentProductViewModel->getProductName()) ?></div>
+</div>
