@@ -4,4 +4,9 @@
         <observer name="zilker_register_current_product"
                   instance="Zilker\CustomRegistry\Observer\RegisterCurrentProductObserver"/>
     </event>
+
+    <event name="catalog_controller_category_init_after">
+        <observer name="zilker_register_current_category"
+                  instance="Zilker\CustomRegistry\Observer\RegisterCurrentCategoryObserver"/>
+    </event>
 </config>

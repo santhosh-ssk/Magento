@@ -27,9 +27,9 @@ class ProductInfo implements ArgumentInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getProductName() : string
+    public function getProductName() : ?string
     {
         return (string) $this->currentProduct->getProduct()->getName();
     }

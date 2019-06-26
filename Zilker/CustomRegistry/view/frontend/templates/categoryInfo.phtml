@@ -1,0 +1,12 @@
+
+<?php
+use Magento\Framework\View\Element\Template;
+use Zilker\CustomRegistry\ViewModel\CategoryInfo;
+
+/** @var Template $block */
+/** @var CategoryInfo $currentCategoryViewModel */
+$currentCategoryViewModel = $block->getData('current_category');
+?>
+<div>
+    <div><?= __('Current Category Name: %1', $currentCategoryViewModel->getCategoryName()) ?></div>
+</div>
