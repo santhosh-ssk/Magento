@@ -21,6 +21,10 @@ use Zilker\MailerCodeApi\Api\MailerCodeRepositoryInterface;
 class RemoveMailerCode
 {
 
+    const ADDITIONAL_OPTIONS = 'additional_options';
+    const INFO_BUY_REQUEST = 'info_buyRequest';
+    const MAILERCODE = 'mailercode';
+
     /**
      * @var Json $jsonSerializer
      */
@@ -129,7 +133,7 @@ class RemoveMailerCode
             /**
              * @var Option $mailerCodeOption
              */
-            $mailerCodeOption = $itemOptions['info_buyRequest'];
+            $mailerCodeOption = $itemOptions[$this::INFO_BUY_REQUEST];
             $value=$mailerCodeOption->getValue();
             $value = $this->jsonSerializer->unserialize($value);
             $productId = $value['product'];
@@ -167,41 +171,45 @@ class RemoveMailerCode
      */
     public function removeMailerCodeAdditionalOptions(array $options, bool $removeAdditionalOptions = true) : array
     {
-        if (array_key_exists('additional_options', $options)) {
-            $isEmpty = false;
-            $index = null;
-            $itr = 0;
+        try {
+            if (array_key_exists($this::ADDITIONAL_OPTIONS, $options)) {
+                $isEmpty = false;
+                $index = null;
+                $itr = 0;
 
-            /**
-             * @var Option $option
-             */
-            $option = $options['additional_options'];
-            $values =$this->jsonSerializer->unserialize($option->getValue());
-            $length = count($values);
-            for ($i=0; $i<$length; $i++) {
-                if (array_key_exists('label', $values[$i])) {
-                    if ($values[$i]['label'] == 'mailercode') {
-                        $index = $itr;
+                /**
+                 * @var Option $option
+                 */
+                $option = $options['additional_options'];
+                $values =$this->jsonSerializer->unserialize($option->getValue());
+                $length = count($values);
+                for ($i=0; $i<$length; $i++) {
+                    if (array_key_exists('label', $values[$i])) {
+                        if ($values[$i]['label'] == 'mailercode') {
+                            $index = $itr;
+                        }
+                    }
+                    $itr++;
+                }
+
+                // mailercode exist in item at index
+                $this->logger->info('index: ' . $index . ' Values: ' . json_encode($values));
+                if (is_integer($index) && $index>=0) {
+                    array_splice($values, $index, 1);
+                    if (count($values)==0) {
+                        $isEmpty = true;
                     }
                 }
-                $itr++;
-            }
 
-            // mailercode exist in item at index
-            $this->logger->info('index: ' . $index . ' Values: ' . json_encode($values));
-            if (is_integer($index) && $index>=0) {
-                array_splice($values, $index, 1);
-                if (count($values)==0) {
-                    $isEmpty = true;
+                $option->setValue($this->jsonSerializer->serialize($values));
+                $options['additional_options'] = $option;
+
+                if ($isEmpty && $removeAdditionalOptions) {
+                    unset($options['additional_options']);
                 }
             }
-
-            $option->setValue($this->jsonSerializer->serialize($values));
-            $options['additional_options'] = $option;
-
-            if ($isEmpty && $removeAdditionalOptions) {
-                unset($options['additional_options']);
-            }
+        } catch (Exception $e) {
+            $this->logger->info($e->getMessage());
         }
         return $options;
     }

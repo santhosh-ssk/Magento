@@ -1,0 +1,35 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Zilker_MailerCode::css/mailercode-checkout.css" />
+    </head>
+    <body>
+        <referenceBlock name="checkout.root">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="checkout" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="sidebar" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="summary" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="mailercode" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Zilker_MailerCode/js/view/mailercode</item>
+                                                    <item name="sortOrder" xsi:type="string">0</item>
+                                                    <item name="displayArea" xsi:type="string">mailercode</item>
+                                                    <item name="config" xsi:type="array">
+                                                        <item name="template" xsi:type="string">Zilker_MailerCode/view/mailercode</item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

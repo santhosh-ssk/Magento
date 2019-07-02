@@ -24,6 +24,7 @@
         <plugin name="Zilker_MailerCode_Remove_MailerCode_Plugin" type="Zilker\MailerCode\Plugin\MailerCode\Item\Options\RemoveMailerCode" sortOrder="1" disabled="false" />
     </type>
 
+
     <!--   MailerCode custom session -->
     <type name="Zilker\MailerCode\Model\Session">
         <arguments>
